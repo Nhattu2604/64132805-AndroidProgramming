@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
     //b1.2 Lay du lieu tu 2 dieu khien o tren
     String soThu1 = editTextSo1.getText().toString();
-    String soThu2 = editTextSo1.getText().toString();
+    String soThu2 = editTextSo2.getText().toString();
     //b1.3 chuyen du lieu tu chuoi sang so
     float soA = Float.parseFloat(soThu1);
     float soB = Float.parseFloat(soThu2);
@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
 
         //b1.2 Lay du lieu tu 2 dieu khien o tren
         String soThu1 = editTextSo1.getText().toString();
-        String soThu2 = editTextSo1.getText().toString();
+        String soThu2 = editTextSo2.getText().toString();
         //b1.3 chuyen du lieu tu chuoi sang so
         float soA = Float.parseFloat(soThu1);
         float soB = Float.parseFloat(soThu2);
@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
 
         //b1.2 Lay du lieu tu 2 dieu khien o tren
         String soThu1 = editTextSo1.getText().toString();
-        String soThu2 = editTextSo1.getText().toString();
+        String soThu2 = editTextSo2.getText().toString();
         //b1.3 chuyen du lieu tu chuoi sang so
         float soA = Float.parseFloat(soThu1);
         float soB = Float.parseFloat(soThu2);
@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
 
         //b1.2 Lay du lieu tu 2 dieu khien o tren
         String soThu1 = editTextSo1.getText().toString();
-        String soThu2 = editTextSo1.getText().toString();
+        String soThu2 = editTextSo2.getText().toString();
         //b1.3 chuyen du lieu tu chuoi sang so
         float soA = Float.parseFloat(soThu1);
         float soB = Float.parseFloat(soThu2);
