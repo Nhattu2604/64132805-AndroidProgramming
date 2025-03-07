@@ -38,7 +38,7 @@ public class ActivityLogin extends AppCompatActivity {
                 String email = edtMail.getText().toString().trim();
 
                 // Kiểm tra thông tin đăng nhập
-                if (username.equals("63CNTT2") && password.equals("ABCDEF")) {
+                if (username.equals("NguyenNhatTu") && password.equals("ABCDEF")&&email.equals("NguyenNhatTu@ntu.edu.vn")) {
                     // Đăng nhập thành công
                     Toast.makeText(ActivityLogin.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
 
