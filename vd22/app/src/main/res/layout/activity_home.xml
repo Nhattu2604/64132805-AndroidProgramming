@@ -1,66 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
     android:background="#66BB6A "
     tools:context=".ActivityHome">
-
     <TextView
-        android:id="@+id/textView10"
-        android:layout_width="409dp"
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#FFC107"
-        android:text="MTT64-NTU  QUIZ"
+        android:text="MTT64-NTU QUIZ"
         android:textAlignment="center"
         android:textSize="25sp"
-        tools:layout_editor_absoluteX="1dp" />
+        android:padding="10dp"
+        android:textStyle="bold"/>
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textSize="20dp"
+    android:paddingTop="50dp"
+    android:text="MÀN HÌNH CHÍNH"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/textView11"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Màn Hình Chính"
-        android:textSize="25sp"
-        tools:layout_editor_absoluteX="117dp"
-        tools:layout_editor_absoluteY="79dp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CHÀO MỪNG "/>
+        <TextView
+            android:id="@+id/tvUserName"
+            android:paddingLeft="20dp"
+            android:textSize="20dp"
+            android:text="Tên Đăng Nhập Hiện Ra Đây"
+            android:gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/textView12"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Chào mừng"
-        android:textSize="25sp"
-        tools:layout_editor_absoluteX="31dp"
-        tools:layout_editor_absoluteY="148dp" />
-
-    <TextView
-        android:id="@+id/tvUserName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Nguyễn Nhật Tú"
-        android:textSize="25sp"
-        tools:layout_editor_absoluteX="207dp"
-        tools:layout_editor_absoluteY="148dp" />
-
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Quiz 1"
-        android:textSize="30sp"
-        tools:layout_editor_absoluteX="31dp"
-        tools:layout_editor_absoluteY="416dp" />
-
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Quiz 2"
-        android:textSize="30sp"
-        tools:layout_editor_absoluteX="225dp"
-        tools:layout_editor_absoluteY="416dp" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <ImageView
+        android:layout_width="192dp"
+        android:layout_height="164dp"
+        android:background="#673AB7"
+        tools:srcCompat="@tools:sample/avatars"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal"
+        android:layout_height="wrap_content">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="QUIZ 1"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="QUIZ 2"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="QUIZ 3"/>
+    </LinearLayout>
+</LinearLayout>

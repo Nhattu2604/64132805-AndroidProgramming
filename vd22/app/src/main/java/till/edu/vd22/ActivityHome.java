@@ -1,6 +1,8 @@
 package till.edu.vd22;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,5 +22,9 @@ public class ActivityHome extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        Intent intenTuLogin = getIntent();
+        String tenDN_NhanDuoc = intenTuLogin.getStringExtra("ten_dang_nhap");
+        TextView tvTenDN =(TextView) findViewById(R.id.tvUserName);
+        tvTenDN.setText(tenDN_NhanDuoc);
     }
 }

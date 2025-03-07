@@ -41,9 +41,14 @@ public class ActivityLogin extends AppCompatActivity {
                 if (username.equals("NguyenNhatTu") && password.equals("ABCDEF")&&email.equals("NguyenNhatTu@ntu.edu.vn")) {
                     // Đăng nhập thành công
                     Toast.makeText(ActivityLogin.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
+                //goi du lieu vao iQuiz dang key va value dung de loc cac ra du lieu
 
                     // Chuyển sang màn hình chính
                     Intent iManHinhLogin = new Intent(ActivityLogin.this, ActivityHome.class);
+                    //goi du lieu vao iQuiz dang key va value dung de loc cac ra du lieu
+                    iManHinhLogin.putExtra("ten_dang_nhap",username);
+                    iManHinhLogin.putExtra("ten_dang_nhap",password);
+                    //gui di
                     startActivity(iManHinhLogin);
                 } else {
                     // Đăng nhập thất bại
