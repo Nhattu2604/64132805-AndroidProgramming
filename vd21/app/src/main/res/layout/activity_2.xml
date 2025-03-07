@@ -5,25 +5,28 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".activity2">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Màn hình trang chủ "
-        tools:layout_editor_absoluteX="119dp"
-        tools:layout_editor_absoluteY="27dp" />
+        android:text="Bạn đang ở màn hình 2"
+        android:textSize="25sp"
+        tools:layout_editor_absoluteX="78dp"
+        tools:layout_editor_absoluteY="39dp" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/btnquaylai"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="133dp"
-        android:layout_marginTop="69dp"
-        android:layout_marginEnd="188dp"
-        android:text="chuyển sang màn hình khác"
+        android:layout_marginStart="104dp"
+        android:layout_marginTop="36dp"
+        android:layout_marginEnd="93dp"
+        android:text="Quay lại trang chủ"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
 </androidx.constraintlayout.widget.ConstraintLayout>
