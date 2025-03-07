@@ -14,7 +14,9 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class ActivityLogin extends AppCompatActivity {
+    //button
     private Button btnOk;
+    
     private EditText edtUserName, edtPass, edtMail;
 
     @Override
