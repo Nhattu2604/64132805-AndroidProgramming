@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="#66BB6A"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:padding="0dp"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
@@ -11,20 +14,11 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Màn hình trang chủ "
-        tools:layout_editor_absoluteX="124dp"
-        tools:layout_editor_absoluteY="82dp" />
+        android:text="Màn hình trang chủ " />
 
     <Button
         android:id="@+id/btnopen"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="133dp"
-        android:layout_marginTop="52dp"
-        android:layout_marginEnd="188dp"
-        android:text="chuyển sang màn hình khác"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.43"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:text="chuyển sang màn hình khác" />
+</LinearLayout>
