@@ -12,18 +12,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Màn hình trang chủ "
-        tools:layout_editor_absoluteX="119dp"
-        tools:layout_editor_absoluteY="27dp" />
+        tools:layout_editor_absoluteX="124dp"
+        tools:layout_editor_absoluteY="82dp" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/btnopen"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="133dp"
-        android:layout_marginTop="69dp"
+        android:layout_marginTop="52dp"
         android:layout_marginEnd="188dp"
         android:text="chuyển sang màn hình khác"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.43"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 </androidx.constraintlayout.widget.ConstraintLayout>
