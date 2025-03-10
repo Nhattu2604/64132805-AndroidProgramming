@@ -50,6 +50,7 @@
         android:layout_width="192dp"
         android:layout_height="164dp"
         android:background="#673AB7"
+        android:src="@drawable/ic_launcher_background"
         android:contentDescription="Ảnh đại diện của người dùng"/>
 
 
