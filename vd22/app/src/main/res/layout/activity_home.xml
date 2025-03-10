@@ -7,8 +7,9 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:background="#66BB6A "
+    android:background="#66BB6A"
     tools:context=".ActivityHome">
+
     <TextView
         android:id="@+id/textView"
         android:layout_width="match_parent"
@@ -19,55 +20,63 @@
         android:textSize="25sp"
         android:padding="10dp"
         android:textStyle="bold"/>
-<TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:textSize="20dp"
-    android:paddingTop="50dp"
-    android:text="MÀN HÌNH CHÍNH"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:paddingTop="50dp"
+        android:text="MÀN HÌNH CHÍNH"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:orientation="horizontal"
         android:layout_height="wrap_content">
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="CHÀO MỪNG "/>
         <TextView
             android:id="@+id/tvUserName"
-            android:paddingLeft="20dp"
-            android:textSize="20dp"
-            android:text="Tên Đăng Nhập Hiện Ra Đây"
-            android:gravity="center_horizontal"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:paddingLeft="20dp"
+            android:textSize="20sp"
+            android:text="Tên Đăng Nhập Hiện Ra Đây"
+            android:layout_gravity="center_horizontal"/>
     </LinearLayout>
 
     <ImageView
         android:layout_width="192dp"
         android:layout_height="164dp"
         android:background="#673AB7"
-        tools:srcCompat="@tools:sample/avatars"/>
+        android:contentDescription="Ảnh đại diện của người dùng"/>
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:orientation="horizontal"
         android:gravity="center_horizontal"
         android:layout_height="wrap_content">
+
         <Button
+            android:id="@+id/btnQuiz1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:text="QUIZ 1"/>
         <Button
+            android:id="@+id/btnQuiz2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:text="QUIZ 2"/>
         <Button
+            android:id="@+id/btnQuiz3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:text="QUIZ 3"/>
     </LinearLayout>
+
 </LinearLayout>

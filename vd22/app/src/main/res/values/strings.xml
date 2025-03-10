@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">vd2.2</string>
+    <string name="app_title">MTT64-NTU QUIZ</string>
+    <string name="main_screen">MÀN HÌNH CHÍNH</string>
+    <string name="login">Đăng nhập</string>
 </resources>
