@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
     ListView ListViewNNLT;
     ArrayList<String> dsNgonNguLT;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
                 // lam theo yeu cau bat ky doi voi gia tri get duoc
                 // vd toast len
                 Toast.makeText(MainActivity.this,giatriduocchon,Toast.LENGTH_LONG).show();
+
+
             }
         });
     }
