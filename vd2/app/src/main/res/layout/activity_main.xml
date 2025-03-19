@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal|center_vertical"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- LinearLayout ngang để chứa các thành phần nhập số -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginBottom="10dp">
+
+        <!-- EditText để nhập số đầu tiên -->
+        <EditText
+            android:id="@+id/editTextNum1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Nhập số 1"
+            android:inputType="number"
+            android:gravity="center"
+            android:layout_marginEnd="10dp"/>
+
+        <!-- Dấu cộng (+) -->
+        <TextView
+            android:id="@+id/plusSign"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+"
+            android:gravity="center"
+            android:textSize="24sp"
+            android:layout_marginEnd="10dp"/>
+
+        <!-- EditText để nhập số thứ hai -->
+        <EditText
+            android:id="@+id/editTextNum2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Nhập số 2"
+            android:inputType="number"
+            android:gravity="center"
+            android:layout_marginEnd="10dp"/>
+
+        <!-- Nút tính toán -->
+        <Button
+            android:id="@+id/btnCalculate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tính Tổng"
+            android:layout_marginEnd="10dp"/>
+
+        <!-- EditText để hiển thị kết quả -->
+        <EditText
+            android:id="@+id/editTextResult"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Kết quả"
+            android:editable="false"
+            android:gravity="center"
+            android:paddingRight="1dp"
+           />
+    </LinearLayout>
+
+    <!-- Các nút từ 1 đến 9 -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:id="@+id/btn_1"
+            android:text="1" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:id="@+id/btn_2"
+            android:text="2" />
+
+        <Button
+            android:id="@+id/btn_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3" />
+    </LinearLayout>
+
+    <!-- Các nút thứ hai -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="10dp">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:id="@+id/btn_4"
+            android:text="4" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:id="@+id/btn_5"
+            android:text="5" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:id="@+id/btn_6"
+            android:text="6" />
+    </LinearLayout>
+
+    <!-- Các nút thứ ba -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="10dp">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:id="@+id/btn_7"
+            android:text="7" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:id="@+id/btn_8"
+            android:text="8" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:id="@+id/btn_9"
+            android:text="9" />
+    </LinearLayout>
+
+</LinearLayout>
