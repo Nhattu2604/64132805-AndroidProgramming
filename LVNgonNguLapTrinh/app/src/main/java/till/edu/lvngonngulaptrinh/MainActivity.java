@@ -34,9 +34,9 @@ public class MainActivity extends AppCompatActivity {
         //B1: chuan bi du lieu, hard-core
         ListViewNNLT = findViewById(R.id.LV_NgonNguLapTrinh);
         dsNgonNguLT = new ArrayList<String>();
-        dsNgonNguLT.add("Python");
-        dsNgonNguLT.add("Php");
-        dsNgonNguLT.add("Java");
+        dsNgonNguLT.add("bai1");
+        dsNgonNguLT.add("bai2");
+        dsNgonNguLT.add("bai3");
         //B2:
         ArrayAdapter<String> addapterNNLT;
         addapterNNLT = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,dsNgonNguLT);
