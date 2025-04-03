@@ -17,10 +17,14 @@ import androidx.core.view.WindowInsetsCompat;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    ListView ListViewNNLT;
-    ArrayList<String> dsNgonNguLT;
 
 
+    ListView LV_NgonNguLapTrinh;
+    ArrayList<String> dsnnlt;
+
+    void TimDieuKhien(){
+        LV_NgonNguLapTrinh = (ListView) findViewById(R.id.LV_NgonNguLapTrinh);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,28 +35,24 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        //B1: chuan bi du lieu, hard-core
-        ListViewNNLT = findViewById(R.id.LV_NgonNguLapTrinh);
-        dsNgonNguLT = new ArrayList<String>();
-        dsNgonNguLT.add("bai1");
-        dsNgonNguLT.add("bai2");
-        dsNgonNguLT.add("bai3");
-        //B2:
-        ArrayAdapter<String> addapterNNLT;
-        addapterNNLT = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,dsNgonNguLT);
-        //b3 gan addapter
-        ListViewNNLT.setAdapter(addapterNNLT);
-        //b4 gan bo lang nghe va sly su kien
-        ListViewNNLT.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+         TimDieuKhien();
+         dsnnlt = new ArrayList<String>();
+         dsnnlt.add("Hong");
+         dsnnlt.add("Dao");
+         dsnnlt.add("Lan");
+         dsnnlt.add("Cuc");
+         dsnnlt.add("...");
+         dsnnlt.add("...");
+         dsnnlt.add("...");
+
+        ArrayAdapter<String> AdapterLV;
+        AdapterLV = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,dsnnlt);
+        LV_NgonNguLapTrinh.setAdapter(AdapterLV);
+        LV_NgonNguLapTrinh.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // bien position da chua vi tri cua item duoc click
-                String giatriduocchon = dsNgonNguLT.get(position);
-                // lam theo yeu cau bat ky doi voi gia tri get duoc
-                // vd toast len
-                Toast.makeText(MainActivity.this,giatriduocchon,Toast.LENGTH_LONG).show();
-
-
+                String giatri = dsnnlt.get(position);
+                Toast.makeText(MainActivity.this,giatri, Toast.LENGTH_LONG).show();
             }
         });
     }
