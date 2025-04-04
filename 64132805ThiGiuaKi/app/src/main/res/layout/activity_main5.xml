@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="#F5F5F5"
+    android:gravity="center"
+    tools:context=".MainActivity5">
+    <!-- Name -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Kiểm Tra Giữa Kì I"
+        android:textSize="40sp"
+        android:textStyle="bold"
+        android:textColor="#F44336"
+        android:layout_marginBottom="8dp"/>
+    <ImageView
+        android:id="@+id/imageView2"
+
+        android:layout_width="match_parent"
+
+        android:layout_height="262dp"
+        app:srcCompat="@drawable/f1" />
+
+    <TextView
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nguyễn Nhật Tú"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:textColor="#2196F3"
+        android:layout_marginBottom="8dp"/>
+
+    <!-- Class -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Lớp: 64.TTMMT"
+        android:textSize="30sp"
+        android:textColor="#757575"
+        android:layout_marginBottom="8dp"/>
+
+    <!-- MSSV -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="MSSV: 64132805"
+        android:textSize="30sp"
+        android:textColor="#757575"
+        android:layout_marginBottom="20dp"/>
+
+    <!-- Button or any other content can be added here -->
+
+
+
+</LinearLayout>

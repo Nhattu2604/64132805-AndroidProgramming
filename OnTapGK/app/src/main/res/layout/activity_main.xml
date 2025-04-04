@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_gravity="center"
+    android:gravity="center"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="MÀN HÌNH CHÍNH Ở ĐÂY"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:padding="20dp"/>
+    <!-- Dòng đầu tiên: chứa 2 nút bấm "Trang Thứ Nhất" và "Hai" -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal"
+        android:layout_marginBottom="16dp">
+
+        <Button
+            android:id="@+id/btnMH1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Trang Thứ Nhất"
+            android:layout_marginEnd="16dp" />
+
+        <Button
+            android:id="@+id/btnMH2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Trang Thứ hai" />
+    </LinearLayout>
+
+    <!-- Dòng thứ hai: chứa 2 nút bấm "Ba" và "Bốn" -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="16dp">
+
+        <Button
+            android:id="@+id/btnMH3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Trang Thứ Ba"
+            android:layout_marginEnd="16dp" />
+
+        <Button
+            android:id="@+id/btnMH4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Trang Thứ Tư" />
+    </LinearLayout>
+
+</LinearLayout>
