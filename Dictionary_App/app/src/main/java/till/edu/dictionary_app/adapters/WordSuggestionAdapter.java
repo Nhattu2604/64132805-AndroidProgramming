@@ -20,55 +20,57 @@ import till.edu.dictionary_app.R;
 
 public class WordSuggestionAdapter extends ArrayAdapter<WordEntry> {
 
-    private Context mContext;
-    private int mResource;
+    // --- Biến đã được đổi tên ---
+    private Context nguCanhUngDung; // mContext -> nguCanhUngDung
+    private int idBoCuc; // mResource -> idBoCuc
 
-    public WordSuggestionAdapter(@NonNull Context context, int resource, @NonNull List<WordEntry> objects) {
-        super(context, resource, objects);
-        this.mContext = context;
-        this.mResource = resource;
+    // Constructor
+    public WordSuggestionAdapter(@NonNull Context nguCanh, int taiNguyen, @NonNull List<WordEntry> doiTuong) { // context -> nguCanh, resource -> taiNguyen, objects -> doiTuong
+        super(nguCanh, taiNguyen, doiTuong);
+        this.nguCanhUngDung = nguCanh; // mContext -> nguCanhUngDung
+        this.idBoCuc = taiNguyen; // mResource -> idBoCuc
     }
 
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+    public View getView(int viTri, @Nullable View khungChuyenDoi, @NonNull ViewGroup phuHuynh) { // position -> viTri, convertView -> khungChuyenDoi, parent -> phuHuynh
         // Lấy đối tượng WordEntry cho vị trí hiện tại
-        WordEntry entry = getItem(position);
+        WordEntry mucTu = getItem(viTri); // entry -> mucTu
 
         // Kiểm tra nếu convertView đã được sử dụng lại, nếu không thì inflate layout mới
-        if (convertView == null) {
-            convertView = LayoutInflater.from(mContext).inflate(mResource, parent, false);
+        if (khungChuyenDoi == null) {
+            khungChuyenDoi = LayoutInflater.from(nguCanhUngDung).inflate(idBoCuc, phuHuynh, false); // nguCanhUngDung thay cho mContext, idBoCuc thay cho mResource
         }
 
         // Ánh xạ các TextView từ layout tùy chỉnh
-        TextView tvWord = convertView.findViewById(R.id.tv_suggestion_word);
-        TextView tvMeaningPreview = convertView.findViewById(R.id.tv_suggestion_meaning_preview);
+        TextView tvTuGoiY = khungChuyenDoi.findViewById(R.id.tv_suggestion_word); // tvWord -> tvTuGoiY
+        TextView tvXemTruocNghia = khungChuyenDoi.findViewById(R.id.tv_suggestion_meaning_preview); // tvMeaningPreview -> tvXemTruocNghia
 
         // Đặt dữ liệu vào các TextView
-        if (entry != null) {
-            tvWord.setText(entry.getWord());
+        if (mucTu != null) { // mucTu thay cho entry
+            tvTuGoiY.setText(mucTu.getWord()); // tvTuGoiY thay cho tvWord
 
             // Hiển thị preview nghĩa, ưu tiên HTML nếu có, nếu không thì description
-            String previewText = "";
-            if (entry.getHtml() != null && !entry.getHtml().isEmpty()) {
+            String vanBanXemTruoc = ""; // previewText -> vanBanXemTruoc
+            if (mucTu.getHtml() != null && !mucTu.getHtml().isEmpty()) { // mucTu thay cho entry
                 // Cố gắng lấy text thuần từ HTML cho preview
                 // Sử dụng FROM_HTML_MODE_COMPACT cho API 24+
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                    previewText = Html.fromHtml(entry.getHtml(), Html.FROM_HTML_MODE_COMPACT).toString();
+                    vanBanXemTruoc = Html.fromHtml(mucTu.getHtml(), Html.FROM_HTML_MODE_COMPACT).toString(); // mucTu thay cho entry
                 } else {
                     // API cũ hơn
-                    previewText = Html.fromHtml(entry.getHtml()).toString();
+                    vanBanXemTruoc = Html.fromHtml(mucTu.getHtml()).toString(); // mucTu thay cho entry
                 }
-            } else if (entry.getDescription() != null && !entry.getDescription().isEmpty()) {
-                previewText = entry.getDescription();
+            } else if (mucTu.getDescription() != null && !mucTu.getDescription().isEmpty()) { // mucTu thay cho entry
+                vanBanXemTruoc = mucTu.getDescription();
             }
             // Giới hạn độ dài preview để tránh tràn màn hình (ví dụ 100 ký tự)
-            if (previewText.length() > 100) {
-                previewText = previewText.substring(0, 100) + "...";
+            if (vanBanXemTruoc.length() > 100) {
+                vanBanXemTruoc = vanBanXemTruoc.substring(0, 100) + "...";
             }
-            tvMeaningPreview.setText(previewText.trim()); // trim() để loại bỏ khoảng trắng đầu/cuối
+            tvXemTruocNghia.setText(vanBanXemTruoc.trim()); // tvXemTruocNghia thay cho tvMeaningPreview, vanBanXemTruoc thay cho previewText
         }
 
-        return convertView;
+        return khungChuyenDoi; // khungChuyenDoi thay cho convertView
     }
 }

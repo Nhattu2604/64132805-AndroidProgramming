@@ -7,7 +7,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.Html; // Import Html để hiển thị HTML
 import android.view.View;
-// import android.widget.ArrayAdapter; // Không cần ArrayAdapter mặc định nữa
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -21,249 +20,272 @@ import java.util.ArrayList;
 import java.util.List;
 import android.util.Log;
 
-// Đảm bảo import đúng các class bạn đã tạo/sửa
+// Import các lớp tùy chỉnh của ứng dụng
 import till.edu.dictionary_app.database.DatabaseHelper;
 import till.edu.dictionary_app.models.WordEntry;
-import till.edu.dictionary_app.adapters.WordSuggestionAdapter; // <-- CHỈNH SỬA IMPORT NÀY
+import till.edu.dictionary_app.adapters.WordSuggestionAdapter;
 
+/**
+ * MainActivity là màn hình chính của ứng dụng từ điển, cho phép người dùng tìm kiếm từ,
+ * xem gợi ý và truy cập các chức năng khác như lịch sử, yêu thích.
+ */
 public class MainActivity extends AppCompatActivity {
 
-    private EditText etSearch;
-    private ListView listViewWords;
-    // Thay đổi từ ArrayList<String> thành ArrayList<WordEntry>
-    private ArrayList<WordEntry> currentSuggestions;
-    // Thay đổi từ ArrayAdapter<String> thành WordSuggestionAdapter
-    private WordSuggestionAdapter suggestionAdapter;
+    // Khai báo các thành phần UI
+    private EditText oTimKiem; // Ô nhập liệu để người dùng gõ từ cần tìm
+    private ListView danhSachTuGoiY; // ListView để hiển thị danh sách các từ gợi ý
+    private ArrayList<WordEntry> goiYHienTai; // Danh sách chứa các đối tượng từ gợi ý hiện tại
+    private WordSuggestionAdapter boDieuPhoiGoiY; // Adapter để kết nối dữ liệu gợi ý với ListView
 
-    private DatabaseHelper databaseHelper;
+    private DatabaseHelper boTroCSDL; // Đối tượng giúp tương tác với cơ sở dữ liệu
 
-    private ImageButton btnSearchBottom, btnHistoryBottom, btnFavoritesBottom, btnTranslateBottom;
-    private TextView tvEnglish, tvVietnamese;
-    private View ivSwap;
+    // Các nút chức năng ở thanh điều hướng phía dưới
+    private ImageButton nutTimKiemDuoi, nutLichSuDuoi, nutYeuThichDuoi, nutDichDuoi;
+    // TextView hiển thị ngôn ngữ hiện tại (Anh/Việt)
+    private TextView tvTiengAnh, tvTiengViet;
+    private View nutHoanDoi; // Nút dùng để chuyển đổi chiều dịch (Anh-Việt hoặc Việt-Anh)
 
-    private boolean isEnglishToVietnamese = true; // Cờ để xác định chiều dịch
+    private boolean laAnhViet = true; // Cờ boolean xác định chiều dịch hiện tại: true nếu là Anh -> Việt, false nếu là Việt -> Anh
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main); // Gắn layout activity_main.xml cho Activity này
 
-        // Ánh xạ view
-        etSearch = findViewById(R.id.etSearch);
-        listViewWords = findViewById(R.id.listViewWords);
+        // Ánh xạ các thành phần UI từ layout bằng ID của chúng
+        oTimKiem = findViewById(R.id.etSearch);
+        danhSachTuGoiY = findViewById(R.id.listViewWords);
 
-        btnSearchBottom = findViewById(R.id.btnSearch);
-        btnHistoryBottom = findViewById(R.id.btnHistory);
-        btnFavoritesBottom = findViewById(R.id.btnFavorites);
+        nutTimKiemDuoi = findViewById(R.id.btnSearch);
+        nutLichSuDuoi = findViewById(R.id.btnHistory);
+        nutYeuThichDuoi = findViewById(R.id.btnFavorites);
+        // nutDichDuoi không được sử dụng trực tiếp trong MainActivity, nhưng giữ lại nếu có ý định sử dụng trong tương lai
 
-        tvEnglish = findViewById(R.id.tvEnglish);
-        tvVietnamese = findViewById(R.id.tvVietnamese);
-        ivSwap = findViewById(R.id.ivSwap);
+        tvTiengAnh = findViewById(R.id.tvEnglish);
+        tvTiengViet = findViewById(R.id.tvVietnamese);
+        nutHoanDoi = findViewById(R.id.ivSwap);
 
-        databaseHelper = new DatabaseHelper(this); // Khởi tạo DatabaseHelper
+        // Khởi tạo đối tượng DatabaseHelper để làm việc với cơ sở dữ liệu từ điển
+        boTroCSDL = new DatabaseHelper(this);
 
-        // Tạo database (nếu chưa có) và mở nó
+        // Khối lệnh try-catch để xử lý việc tạo và mở cơ sở dữ liệu
         try {
-            databaseHelper.createDatabase();
-            databaseHelper.openDatabase();
-            Log.d("MainActivity", "Database opened successfully.");
+            boTroCSDL.createDatabase(); // Tạo cơ sở dữ liệu nếu chưa tồn tại
+            boTroCSDL.openDatabase(); // Mở cơ sở dữ liệu để sẵn sàng truy vấn
+            Log.d("MainActivity", "Database opened successfully."); // Ghi log khi mở CSDL thành công
         } catch (IOException e) {
-            e.printStackTrace();
-            Toast.makeText(this, "Lỗi khi tạo/mở database: " + e.getMessage(), Toast.LENGTH_LONG).show();
-            Log.e("MainActivity", "Error creating/opening database", e);
+            e.printStackTrace(); // In lỗi ra console nếu có vấn đề khi tạo/mở CSDL
+            Toast.makeText(this, "Lỗi khi tạo/mở database: " + e.getMessage(), Toast.LENGTH_LONG).show(); // Hiển thị thông báo lỗi cho người dùng
+            Log.e("MainActivity", "Error creating/opening database", e); // Ghi log lỗi chi tiết
         }
 
-        // --- SỬA ĐỔI CHÍNH TẠI ĐÂY ---
-        // Thay đổi kiểu dữ liệu và khởi tạo adapter
-        currentSuggestions = new ArrayList<>();
-        // Sử dụng WordSuggestionAdapter với layout tùy chỉnh của bạn (R.layout.item_word_suggestion)
-        suggestionAdapter = new WordSuggestionAdapter(this, R.layout.item_word_suggestion, currentSuggestions);
-        listViewWords.setAdapter(suggestionAdapter);
+        // Khởi tạo danh sách gợi ý và thiết lập adapter cho ListView
+        goiYHienTai = new ArrayList<>(); // Khởi tạo ArrayList rỗng để chứa các từ gợi ý
+        // Khởi tạo WordSuggestionAdapter với ngữ cảnh, layout item tùy chỉnh và danh sách gợi ý
+        boDieuPhoiGoiY = new WordSuggestionAdapter(this, R.layout.item_word_suggestion, goiYHienTai);
+        danhSachTuGoiY.setAdapter(boDieuPhoiGoiY); // Gắn adapter vào ListView
 
-        // Tải gợi ý mặc định khi Activity được tạo lần đầu
-        loadDefaultSuggestions();
-        // --- KẾT THÚC SỬA ĐỔI CHÍNH TẠI ĐÂY ---
+        // Tải các từ gợi ý mặc định khi Activity mới được tạo
+        taiGoiYMacDinh();
 
-        // listViewWords.setVisibility(View.GONE); // Dòng này không cần thiết nữa nếu bạn muốn hiển thị gợi ý mặc định ngay
-
-        etSearch.addTextChangedListener(new TextWatcher() {
+        // Thêm TextWatcher để theo dõi sự thay đổi văn bản trong ô tìm kiếm
+        oTimKiem.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // Không làm gì trước khi văn bản thay đổi
+            }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // Gọi AsyncTask để lọc gợi ý từ database
-                if (s.length() > 0) { // Chỉ gợi ý khi có ký tự nhập vào
-                    filterSuggestionsFromDatabase(s.toString(), isEnglishToVietnamese);
-                } else { // Ô tìm kiếm trống, tải lại gợi ý mặc định
-                    loadDefaultSuggestions();
+                // Khi văn bản thay đổi, kiểm tra để lọc gợi ý hoặc tải lại mặc định
+                if (s.length() > 0) { // Nếu có ký tự trong ô tìm kiếm
+                    locGoiYTuCSDL(s.toString(), laAnhViet); // Gọi hàm để lọc gợi ý từ cơ sở dữ liệu
+                } else { // Nếu ô tìm kiếm trống
+                    taiGoiYMacDinh(); // Tải lại danh sách gợi ý mặc định
                 }
             }
 
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {
+                // Không làm gì sau khi văn bản thay đổi
+            }
         });
 
-        // Sửa đổi OnItemClickListener để lấy WordEntry từ adapter
-        listViewWords.setOnItemClickListener((parent, view, position, id) -> {
-            WordEntry selectedEntry = currentSuggestions.get(position); // Lấy đối tượng WordEntry
-            String selectedWord = selectedEntry.getWord(); // Lấy từ từ WordEntry
+        // Thiết lập OnItemClickListener cho ListView gợi ý
+        danhSachTuGoiY.setOnItemClickListener((parent, view, position, id) -> {
+            WordEntry selectedEntry = goiYHienTai.get(position); // Lấy đối tượng WordEntry được chọn từ danh sách gợi ý
+            String selectedWord = selectedEntry.getWord(); // Lấy từ (string) từ đối tượng WordEntry
 
-            etSearch.setText(selectedWord);
-            etSearch.setSelection(selectedWord.length()); // Đặt con trỏ về cuối
-            listViewWords.setVisibility(View.GONE); // Ẩn danh sách gợi ý sau khi chọn
-            traTu(selectedWord); // Tra từ từ database
+            oTimKiem.setText(selectedWord); // Đặt từ đã chọn vào ô tìm kiếm
+            oTimKiem.setSelection(selectedWord.length()); // Di chuyển con trỏ về cuối từ
+            danhSachTuGoiY.setVisibility(View.GONE); // Ẩn danh sách gợi ý sau khi người dùng chọn
+            traCuuTu(selectedWord); // Gọi hàm để tra cứu nghĩa của từ
         });
 
-        // Xử lý sự kiện cho nút Search dưới cùng (btnSearchBottom)
-        btnSearchBottom.setOnClickListener(v -> {
-            String word = etSearch.getText().toString().trim();
-            if (word.isEmpty()) {
-                Toast.makeText(MainActivity.this, "Vui lòng nhập từ cần tra", Toast.LENGTH_SHORT).show();
+        // Thiết lập OnClickListener cho nút tìm kiếm ở thanh dưới cùng
+        nutTimKiemDuoi.setOnClickListener(v -> {
+            String word = oTimKiem.getText().toString().trim(); // Lấy từ trong ô tìm kiếm và loại bỏ khoảng trắng thừa
+            if (word.isEmpty()) { // Kiểm tra nếu ô tìm kiếm rỗng
+                Toast.makeText(MainActivity.this, "Vui lòng nhập từ cần tra", Toast.LENGTH_SHORT).show(); // Yêu cầu người dùng nhập từ
                 return;
             }
-            listViewWords.setVisibility(View.GONE); // Ẩn gợi ý khi search
-            traTu(word); // Tra từ từ database
+            danhSachTuGoiY.setVisibility(View.GONE); // Ẩn danh sách gợi ý khi thực hiện tìm kiếm
+            traCuuTu(word); // Thực hiện tra cứu từ
         });
 
-        // --- SỬA ĐỔI CHÍNH TẠI ĐÂY ---
-        // Nút Swap (trên header) để đổi chiều dịch
-        ivSwap.setOnClickListener(v -> {
-            isEnglishToVietnamese = !isEnglishToVietnamese;
-            updateLanguageDisplay(); // Cập nhật giao diện ngôn ngữ
-            etSearch.setText(""); // Xóa từ đang nhập
-            // Tải lại gợi ý mặc định khi đổi chiều dịch
-            loadDefaultSuggestions();
-            Toast.makeText(this, isEnglishToVietnamese ? "Từ điển Anh -> Việt" : "Từ điển Việt -> Anh", Toast.LENGTH_SHORT).show();
+        // Thiết lập OnClickListener cho nút hoán đổi chiều dịch (Anh-Việt / Việt-Anh)
+        nutHoanDoi.setOnClickListener(v -> {
+            laAnhViet = !laAnhViet; // Đảo ngược trạng thái chiều dịch
+            capNhatHienThiNgonNgu(); // Cập nhật giao diện (màu chữ, hint) theo chiều dịch mới
+            oTimKiem.setText(""); // Xóa nội dung ô tìm kiếm khi đổi chiều dịch
+            taiGoiYMacDinh(); // Tải lại gợi ý mặc định phù hợp với chiều dịch mới
+            Toast.makeText(this, laAnhViet ? "Từ điển Anh -> Việt" : "Từ điển Việt -> Anh", Toast.LENGTH_SHORT).show(); // Thông báo chiều dịch hiện tại
         });
-        // --- KẾT THÚC SỬA ĐỔI CHÍNH TẠI ĐÂY ---
 
-
-        // Xử lý sự kiện cho các nút điều hướng dưới cùng (chưa triển khai chức năng)
-        btnHistoryBottom.setOnClickListener(v -> {
-            Toast.makeText(this, "Chức năng Lịch sử chưa triển khai", Toast.LENGTH_SHORT).show();
+        // Xử lý sự kiện cho các nút điều hướng phía dưới
+        nutLichSuDuoi.setOnClickListener(v -> {
+            Toast.makeText(this, "Chức năng Lịch sử chưa triển khai", Toast.LENGTH_SHORT).show(); // Thông báo chức năng chưa triển khai
         });
-        btnFavoritesBottom.setOnClickListener(v -> {
-            // Thay vì Toast, hãy khởi tạo Intent để mở FavoritesActivity
+
+        nutYeuThichDuoi.setOnClickListener(v -> {
+            // Tạo Intent để chuyển sang FavoritesActivity (màn hình từ yêu thích)
             Intent intent = new Intent(MainActivity.this, FavoritesActivity.class);
-            startActivity(intent); // Bắt đầu FavoritesActivity
+            startActivity(intent); // Bắt đầu Activity mới
         });
 
-        updateLanguageDisplay(); // Cập nhật giao diện ngôn ngữ ban đầu
+        // Cập nhật giao diện hiển thị ngôn ngữ ban đầu khi Activity được tạo
+        capNhatHienThiNgonNgu();
     }
 
-    // Đóng database khi activity bị hủy
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (databaseHelper != null) {
-            databaseHelper.close();
-            Log.d("MainActivity", "Database closed.");
+        // Đóng kết nối cơ sở dữ liệu khi Activity bị hủy để giải phóng tài nguyên
+        if (boTroCSDL != null) {
+            boTroCSDL.close();
+            Log.d("MainActivity", "Database closed."); // Ghi log khi đóng CSDL
         }
     }
 
-    // Hàm cập nhật giao diện hiển thị ngôn ngữ và hint
-    private void updateLanguageDisplay() {
-        if (isEnglishToVietnamese) {
-            tvEnglish.setTextColor(getResources().getColor(android.R.color.white));
-            tvVietnamese.setTextColor(getResources().getColor(android.R.color.darker_gray));
-            etSearch.setHint("Tìm từ tiếng Anh");
-        } else {
-            tvEnglish.setTextColor(getResources().getColor(android.R.color.darker_gray));
-            tvVietnamese.setTextColor(getResources().getColor(android.R.color.white));
-            etSearch.setHint("Tìm từ tiếng Việt");
+    /**
+     * Cập nhật giao diện hiển thị ngôn ngữ (màu chữ của "English", "Vietnamese" và hint của ô tìm kiếm)
+     * dựa trên chiều dịch hiện tại (laAnhViet).
+     */
+    private void capNhatHienThiNgonNgu() {
+        if (laAnhViet) { // Nếu chiều dịch là Anh -> Việt
+            tvTiengAnh.setTextColor(getResources().getColor(android.R.color.white)); // Đặt màu trắng cho "English"
+            tvTiengViet.setTextColor(getResources().getColor(android.R.color.darker_gray)); // Đặt màu xám cho "Vietnamese"
+            oTimKiem.setHint("Tìm từ tiếng Anh"); // Đặt gợi ý cho ô tìm kiếm
+        } else { // Nếu chiều dịch là Việt -> Anh
+            tvTiengAnh.setTextColor(getResources().getColor(android.R.color.darker_gray)); // Đặt màu xám cho "English"
+            tvTiengViet.setTextColor(getResources().getColor(android.R.color.white)); // Đặt màu trắng cho "Vietnamese"
+            oTimKiem.setHint("Tìm từ tiếng Việt"); // Đặt gợi ý cho ô tìm kiếm
         }
     }
 
-    // AsyncTask để lọc gợi ý từ database trong background (đã sửa ở bước trước)
-    private void filterSuggestionsFromDatabase(String text, boolean isEngToViet) {
+    /**
+     * Thực hiện lọc các từ gợi ý từ cơ sở dữ liệu trong background
+     * dựa trên chuỗi tìm kiếm và chiều dịch hiện tại.
+     * Sử dụng AsyncTask để tránh chặn luồng UI.
+     * @param chuoiTimKiem Chuỗi mà người dùng đang nhập vào ô tìm kiếm.
+     * @param laAnhVietDich Chiều dịch hiện tại (true: Anh-Việt, false: Việt-Anh).
+     */
+    private void locGoiYTuCSDL(String chuoiTimKiem, boolean laAnhVietDich) {
         new AsyncTask<String, Void, List<WordEntry>>() {
             @Override
             protected List<WordEntry> doInBackground(String... params) {
-                String prefix = params[0];
-                if (databaseHelper == null) return new ArrayList<>();
-                if (isEngToViet) {
-                    return databaseHelper.getEnglishSuggestions(prefix);
-                } else {
-                    return databaseHelper.getVietnameseSuggestions(prefix);
+                String tienTo = params[0]; // Lấy chuỗi tiền tố từ tham số
+                if (boTroCSDL == null) return new ArrayList<>(); // Trả về danh sách rỗng nếu CSDL chưa được khởi tạo
+                if (laAnhVietDich) { // Nếu chiều dịch là Anh -> Việt
+                    return boTroCSDL.getEnglishSuggestions(tienTo); // Lấy gợi ý từ tiếng Anh
+                } else { // Nếu chiều dịch là Việt -> Anh
+                    return boTroCSDL.getVietnameseSuggestions(tienTo); // Lấy gợi ý từ tiếng Việt
                 }
             }
 
             @Override
-            protected void onPostExecute(List<WordEntry> result) {
-                currentSuggestions.clear();
-                if (result != null) {
-                    currentSuggestions.addAll(result);
+            protected void onPostExecute(List<WordEntry> ketQua) {
+                goiYHienTai.clear(); // Xóa các gợi ý cũ
+                if (ketQua != null) {
+                    goiYHienTai.addAll(ketQua); // Thêm các gợi ý mới vào danh sách
                 }
 
-                if (!currentSuggestions.isEmpty()) {
-                    suggestionAdapter.notifyDataSetChanged();
-                    listViewWords.setVisibility(View.VISIBLE);
-                } else {
-                    listViewWords.setVisibility(View.GONE);
+                if (!goiYHienTai.isEmpty()) { // Nếu có gợi ý
+                    boDieuPhoiGoiY.notifyDataSetChanged(); // Cập nhật dữ liệu cho adapter để hiển thị trên ListView
+                    danhSachTuGoiY.setVisibility(View.VISIBLE); // Hiển thị ListView gợi ý
+                } else { // Nếu không có gợi ý nào
+                    danhSachTuGoiY.setVisibility(View.GONE); // Ẩn ListView gợi ý
                 }
             }
-        }.execute(text);
+        }.execute(chuoiTimKiem); // Thực thi AsyncTask với chuỗi tìm kiếm
     }
 
-    // --- THÊM PHƯƠNG THỨC MỚI NÀY VÀO MainActivity ---
-    // AsyncTask để tải các gợi ý mặc định khi ô tìm kiếm trống
-    private void loadDefaultSuggestions() {
+    /**
+     * Tải các từ gợi ý mặc định khi ô tìm kiếm trống hoặc khi khởi tạo Activity.
+     * Sử dụng AsyncTask để lấy dữ liệu từ cơ sở dữ liệu trong background.
+     */
+    private void taiGoiYMacDinh() {
         new AsyncTask<Void, Void, List<WordEntry>>() {
             @Override
             protected List<WordEntry> doInBackground(Void... voids) {
-                if (databaseHelper == null) return new ArrayList<>();
-                // Sử dụng phương thức getDefaultSuggestions đã thêm vào DatabaseHelper
-                return databaseHelper.getDefaultSuggestions(isEnglishToVietnamese);
+                if (boTroCSDL == null) return new ArrayList<>(); // Trả về danh sách rỗng nếu CSDL chưa được khởi tạo
+                // Lấy các từ gợi ý mặc định từ DatabaseHelper dựa trên chiều dịch hiện tại
+                return boTroCSDL.getDefaultSuggestions(laAnhViet);
             }
 
             @Override
-            protected void onPostExecute(List<WordEntry> result) {
-                currentSuggestions.clear();
-                if (result != null) {
-                    currentSuggestions.addAll(result);
+            protected void onPostExecute(List<WordEntry> ketQua) {
+                goiYHienTai.clear(); // Xóa các gợi ý cũ
+                if (ketQua != null) {
+                    goiYHienTai.addAll(ketQua); // Thêm các gợi ý mới vào danh sách
                 }
 
-                if (!currentSuggestions.isEmpty()) {
-                    suggestionAdapter.notifyDataSetChanged();
-                    listViewWords.setVisibility(View.VISIBLE); // Hiển thị ListView
-                } else {
-                    listViewWords.setVisibility(View.GONE); // Ẩn nếu không có gợi ý nào
+                if (!goiYHienTai.isEmpty()) { // Nếu có gợi ý
+                    boDieuPhoiGoiY.notifyDataSetChanged(); // Cập nhật adapter để hiển thị trên ListView
+                    danhSachTuGoiY.setVisibility(View.VISIBLE); // Hiển thị ListView gợi ý
+                } else { // Nếu không có gợi ý nào
+                    danhSachTuGoiY.setVisibility(View.GONE); // Ẩn ListView gợi ý
                 }
             }
-        }.execute();
+        }.execute(); // Thực thi AsyncTask
     }
-    // --- KẾT THÚC THÊM PHƯƠNG THỨC MỚI ---
 
-    // Hàm tra từ từ database cục bộ (phần này đã đúng)
-    private void traTu(String tu) {
+    /**
+     * Thực hiện tra cứu một từ trong cơ sở dữ liệu và hiển thị chi tiết từ đó
+     * trong WordDetailActivity.
+     * Sử dụng AsyncTask để thực hiện truy vấn CSDL trong background.
+     * @param tuCanTra Từ cần tra cứu.
+     */
+    private void traCuuTu(String tuCanTra) {
         new AsyncTask<String, Void, WordEntry>() {
             @Override
             protected WordEntry doInBackground(String... params) {
-                String word = params[0];
-                if (databaseHelper == null) return null;
-                if (isEnglishToVietnamese) {
-                    return databaseHelper.getEnglishToVietnameseWord(word);
-                } else {
-                    return databaseHelper.getVietnameseToEnglishWord(word);
+                String tu = params[0]; // Lấy từ cần tra từ tham số
+                if (boTroCSDL == null) return null; // Trả về null nếu CSDL chưa được khởi tạo
+                if (laAnhViet) { // Nếu chiều dịch là Anh -> Việt
+                    return boTroCSDL.getEnglishToVietnameseWord(tu); // Tra từ Anh sang Việt
+                } else { // Nếu chiều dịch là Việt -> Anh
+                    return boTroCSDL.getVietnameseToEnglishWord(tu); // Tra từ Việt sang Anh
                 }
             }
 
             @Override
-            protected void onPostExecute(WordEntry entry) {
-                if (entry != null) {
+            protected void onPostExecute(WordEntry mucTu) {
+                if (mucTu != null) { // Nếu tìm thấy từ
+                    // Tạo Intent để chuyển sang WordDetailActivity
                     Intent intent = new Intent(MainActivity.this, WordDetailActivity.class);
-                    // Truyền các trường theo tên cột mới trong WordEntry
-                    intent.putExtra("word_text", entry.getWord());
-                    intent.putExtra("description_text", entry.getDescription());
-                    intent.putExtra("pronounce_text", entry.getPronounce());
-                    intent.putExtra("html_content", entry.getHtml()); // Truyền cả HTML
+                    // Truyền các thông tin chi tiết của từ qua Intent
+                    intent.putExtra("word_text", mucTu.getWord());
+                    intent.putExtra("description_text", mucTu.getDescription());
+                    intent.putExtra("pronounce_text", mucTu.getPronounce());
+                    intent.putExtra("html_content", mucTu.getHtml()); // Truyền cả nội dung HTML của nghĩa
+                    intent.putExtra("is_english_to_vietnamese", laAnhViet); // Truyền chiều dịch hiện tại
 
-                    startActivity(intent);
-                } else {
-                    Toast.makeText(MainActivity.this, "Không tìm thấy từ: '" + tu + "' trong từ điển.", Toast.LENGTH_SHORT).show();
+                    startActivity(intent); // Bắt đầu WordDetailActivity
+                } else { // Nếu không tìm thấy từ
+                    Toast.makeText(MainActivity.this, "Không tìm thấy từ: '" + tuCanTra + "' trong từ điển.", Toast.LENGTH_SHORT).show(); // Thông báo cho người dùng
                 }
             }
-        }.execute(tu);
+        }.execute(tuCanTra); // Thực thi AsyncTask với từ cần tra
     }
 }

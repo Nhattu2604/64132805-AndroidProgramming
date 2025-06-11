@@ -14,52 +14,51 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-import till.edu.dictionary_app.adapters.FavoriteWordAdapter; // <-- DÒNG NÀY PHẢI LÀ FavoriteWordAdapter
+import till.edu.dictionary_app.adapters.FavoriteWordAdapter;
 import till.edu.dictionary_app.database.DatabaseHelper;
 import till.edu.dictionary_app.models.WordEntry;
 
 public class FavoritesActivity extends AppCompatActivity {
+    private static final String TAG = "HoatDongYeuThich"; // TAG -> HoatDongYeuThich
 
-    private static final String TAG = "FavoritesActivity";
+    private RecyclerView danhSachYeuThichRecycler; // rvFavorites -> danhSachYeuThichRecycler
+    private TextView tvKhongCoTuYeuThich; // tvEmptyFavorites -> tvKhongCoTuYeuThich
+    private ImageButton nutQuayLaiTuYeuThich; // btnBackFromFavorites -> nutQuayLaiTuYeuThich
 
-    private RecyclerView rvFavorites;
-    private TextView tvEmptyFavorites;
-    private ImageButton btnBackFromFavorites;
-
-    private DatabaseHelper databaseHelper;
-    private FavoriteWordAdapter favoritesAdapter; // <-- DÒNG NÀY PHẢI LÀ FavoriteWordAdapter
-    private List<WordEntry> favoriteWords = new ArrayList<>();
+    private DatabaseHelper boTroCSDL; // databaseHelper -> boTroCSDL (giữ nhất quán với MainActivity)
+    private FavoriteWordAdapter boDieuPhoiTuYeuThich; // favoritesAdapter -> boDieuPhoiTuYeuThich
+    private List<WordEntry> cacTuYeuThich = new ArrayList<>(); // favoriteWords -> cacTuYeuThich
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorites);
 
-        // Ánh xạ View
-        rvFavorites = findViewById(R.id.rvFavorites);
-        tvEmptyFavorites = findViewById(R.id.tvEmptyFavorites);
-        btnBackFromFavorites = findViewById(R.id.btnBackFromFavorites);
+        // Ánh xạ View (đã đổi tên)
+        danhSachYeuThichRecycler = findViewById(R.id.rvFavorites);
+        tvKhongCoTuYeuThich = findViewById(R.id.tvEmptyFavorites);
+        nutQuayLaiTuYeuThich = findViewById(R.id.btnBackFromFavorites);
 
         // Khởi tạo DatabaseHelper
-        databaseHelper = new DatabaseHelper(this);
+        boTroCSDL = new DatabaseHelper(this);
 
         // Cấu hình RecyclerView
-        rvFavorites.setLayoutManager(new LinearLayoutManager(this));
-        // KHỞI TẠO ĐÚNG FAVORITEWORDADAPTER VỚI HAI ĐỐI SỐ
-        favoritesAdapter = new FavoriteWordAdapter(this, favoriteWords); // <-- DÒNG NÀY PHẢI NHƯ THẾ NÀY
-        rvFavorites.setAdapter(favoritesAdapter);
+        danhSachYeuThichRecycler.setLayoutManager(new LinearLayoutManager(this));
+        // KHỞI TẠO ĐÚNG FAVORITEWORDADAPTER VỚI HAI ĐỐI SỐ (đã đổi tên biến)
+        boDieuPhoiTuYeuThich = new FavoriteWordAdapter(this, cacTuYeuThich);
+        danhSachYeuThichRecycler.setAdapter(boDieuPhoiTuYeuThich);
 
         // Xử lý nút Back
-        btnBackFromFavorites.setOnClickListener(v -> finish());
+        nutQuayLaiTuYeuThich.setOnClickListener(v -> finish());
 
         // Xử lý sự kiện click cho từng item trong RecyclerView
-        favoritesAdapter.setOnItemClickListener(wordEntry -> {
+        boDieuPhoiTuYeuThich.setOnItemClickListener(mucTu -> { // wordEntry -> mucTu (tương tự như WordDetailActivity)
             Intent intent = new Intent(FavoritesActivity.this, WordDetailActivity.class);
-            intent.putExtra("word_text", wordEntry.getWord());
-            intent.putExtra("description_text", wordEntry.getDescription());
-            intent.putExtra("pronounce_text", wordEntry.getPronounce());
-            intent.putExtra("html_content", wordEntry.getHtml());
-            intent.putExtra("is_english_to_vietnamese", wordEntry.isEnglishToVietnamese()); // Giờ WordEntry đã có trường này
+            intent.putExtra("word_text", mucTu.getWord());
+            intent.putExtra("description_text", mucTu.getDescription());
+            intent.putExtra("pronounce_text", mucTu.getPronounce());
+            intent.putExtra("html_content", mucTu.getHtml());
+            intent.putExtra("is_english_to_vietnamese", mucTu.isEnglishToVietnamese());
             startActivity(intent);
         });
     }
@@ -67,35 +66,37 @@ public class FavoritesActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        loadFavoriteWords(); // Tải lại danh sách yêu thích mỗi khi Activity được hiển thị lại
+        taiCacTuYeuThich(); // Tải lại danh sách yêu thích mỗi khi Activity được hiển thị lại (đã đổi tên hàm)
     }
 
-    private void loadFavoriteWords() {
-        // Xóa danh sách cũ
-        favoriteWords.clear();
-        // Lấy danh sách từ yêu thích từ database
-        List<WordEntry> newFavorites = databaseHelper.getAllFavorites();
-        if (newFavorites != null) {
-            favoriteWords.addAll(newFavorites);
+
+    private void taiCacTuYeuThich() { // loadFavoriteWords -> taiCacTuYeuThich
+        // Xóa danh sách cũ (đã đổi tên biến)
+        cacTuYeuThich.clear();
+        // Lấy danh sách từ yêu thích từ database (đã đổi tên biến)
+        List<WordEntry> cacTuYeuThichMoi = boTroCSDL.getAllFavorites(); // newFavorites -> cacTuYeuThichMoi
+        if (cacTuYeuThichMoi != null) {
+            cacTuYeuThich.addAll(cacTuYeuThichMoi);
         }
 
         // Cập nhật Adapter
-        favoritesAdapter.notifyDataSetChanged();
+        boDieuPhoiTuYeuThich.notifyDataSetChanged();
 
-        // Hiển thị thông báo khi danh sách trống
-        if (favoriteWords.isEmpty()) {
-            rvFavorites.setVisibility(View.GONE);
-            tvEmptyFavorites.setVisibility(View.VISIBLE);
+        // Hiển thị thông báo khi danh sách trống (đã đổi tên biến)
+        if (cacTuYeuThich.isEmpty()) {
+            danhSachYeuThichRecycler.setVisibility(View.GONE);
+            tvKhongCoTuYeuThich.setVisibility(View.VISIBLE);
         } else {
-            rvFavorites.setVisibility(View.VISIBLE);
-            tvEmptyFavorites.setVisibility(View.GONE);
+            danhSachYeuThichRecycler.setVisibility(View.VISIBLE);
+            tvKhongCoTuYeuThich.setVisibility(View.GONE);
         }
     }
 
     @Override
     protected void onDestroy() {
-        if (databaseHelper != null) {
-            databaseHelper.close();
+        // Đã đổi tên biến
+        if (boTroCSDL != null) {
+            boTroCSDL.close();
             Log.d(TAG, "DatabaseHelper closed from FavoritesActivity.");
         }
         super.onDestroy();
