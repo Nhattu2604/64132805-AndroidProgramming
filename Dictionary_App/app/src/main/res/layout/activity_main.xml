@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FFFFFF">
+
+    <!-- Dùng FrameLayout để chồng phần tìm kiếm lên phần chọn ngôn ngữ -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="120dp">
+
+        <!-- Thanh chọn ngôn ngữ -->
+        <LinearLayout
+            android:id="@+id/headerLayout"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:background="@drawable/header_background"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:padding="8dp"
+            android:baselineAligned="false">
+
+            <!-- English -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:src="@drawable/ic_flag_uk" />
+
+                <TextView
+                    android:id="@+id/tvEnglish"
+                    android:text="English"
+                    android:textSize="18sp"
+                    android:textColor="#FFFFFF"
+                    android:layout_marginStart="8dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+            <!-- Swap icon -->
+            <ImageView
+                android:id="@+id/ivSwap"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:src="@drawable/ic_swap"
+                android:layout_gravity="center_vertical"/>
+
+            <!-- Vietnamese -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="58dp"
+                    android:layout_height="58dp"
+                    android:src="@drawable/ic_flag_vn" />
+
+                <TextView
+                    android:id="@+id/tvVietnamese"
+                    android:text="Vietnamese"
+                    android:textSize="18sp"
+                    android:textColor="#FFFFFF"
+                    android:layout_marginStart="8dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Thanh tìm kiếm nổi -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="74dp"
+            app:cardCornerRadius="30dp"
+            app:cardElevation="8dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_search"
+                    app:tint="#03A9F4" />
+
+                <EditText
+                    android:id="@+id/etSearch"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:hint="Search"
+                    android:padding="5dp"
+                    android:textColorHint="#575555"
+                    android:textSize="16sp" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+    </FrameLayout>
+
+    <!-- Danh sách từ vựng -->
+    <ListView
+        android:id="@+id/listViewWords"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="8dp" />
+
+    <!-- Thanh điều hướng dưới -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:background="#F5F5F5">
+
+        <ImageButton
+            android:id="@+id/btnSearch"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_search"
+            app:tint="#03A9F4"
+            android:background="@null"
+            android:contentDescription="Search" />
+
+        <ImageButton
+            android:id="@+id/btnHistory"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_history"
+            app:tint="#000000"
+            android:background="@null"
+            android:contentDescription="History" />
+
+        <ImageButton
+            android:id="@+id/btnFavorites"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_star"
+            app:tint="#000000"
+            android:background="@null"
+            android:contentDescription="Favorites" />
+
+
+    </LinearLayout>
+</LinearLayout>
